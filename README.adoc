@@ -1,0 +1,67 @@
+= native-image-config-transformer
+Michael Simons <michael@simons.ac>
+:doctype: article
+:lang: en
+:listing-caption: Listing
+:source-highlighter: coderay
+:icons: font
+:latest_version: 0.0.1-SNAPSHOT
+
+== Introduction
+
+Additional resource transformer for the https://maven.apache.org/plugins/maven-shade-plugin/index.html[Apache Maven Shade Plugin], that can transform JSON formatted configuration files for https://www.graalvm.org/latest/reference-manual/native-image/[GraalVM native image].
+
+They transformers are catered for bundling dependencies into "fat-jars" and are used with the bundled versions of the https://github.com/neo4j/neo4j-jdbc[Neo4j JDBC drivers] and work quite well for that purpose.
+
+They are zero guarantees that they will work for you, too.
+
+Things that will be transformed and relocated:
+
+* Type names in `reflect-config.json` (both the name and names in conditions)
+* Bundle names in `resource-config.json`
+* Type names in `native-image.properties` listed as `--initialize-at-run-time` or `--initialize-at-build-time`.
+
+=== Installation
+
+You must add `native-image-config-transformer` as additional dependency to the `maven-shade-plugin` and configure the included transformers like this:
+
+[source,xml,subs="verbatim,attributes"]
+----
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-shade-plugin</artifactId>
+    <version>3.6.0</version>
+    <dependencies>
+        <dependency>
+            <groupId>eu.michael-simons.maven</groupId>
+            <artifactId>native-image-config-transformer</artifactId>
+            <version>{latest_version}</version>
+        </dependency>
+    </dependencies>
+    <configuration>
+        <transformers>
+            <transformer implementation="ac.simons.maven.shade.NativeImagePropertiesTransformer" />
+            <transformer implementation="ac.simons.maven.shade.ReflectConfigTransformer" />
+        </transformers>
+    </configuration>
+</plugin>
+----
+
+If you source metadata from the https://github.com/oracle/graalvm-reachability-metadata[GraalVM reachability repository], you can configure the https://graalvm.github.io/native-build-tools/latest/maven-plugin.html#_adding_metadata_repository_files[native-maven-plugin] to copy that metadata locally and adding it to your fat jar before the shade plugin is run, so that those resources are transformed, too:
+
+[source,xml]
+.Configure the native-maven-plugin to copy the reachability metadata
+----
+<plugin>
+    <groupId>org.graalvm.buildtools</groupId>
+    <artifactId>native-maven-plugin</artifactId>
+    <executions>
+        <execution>
+            <id>add-reachability-metadata</id>
+            <goals>
+                <goal>add-reachability-metadata</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin>
+----
