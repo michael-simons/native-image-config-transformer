@@ -5,7 +5,7 @@ Michael Simons <michael@simons.ac>
 :listing-caption: Listing
 :source-highlighter: coderay
 :icons: font
-:latest_version: 0.0.1-SNAPSHOT
+:latest_version: 0.0.1
 
 == Introduction
 
