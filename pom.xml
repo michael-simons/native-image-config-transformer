@@ -21,7 +21,7 @@
 
 	<groupId>eu.michael-simons.maven</groupId>
 	<artifactId>native-image-config-transformer</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.2-SNAPSHOT</version>
 
 	<packaging>jar</packaging>
 	<name>Native image config transformer</name>
@@ -56,7 +56,7 @@
 	<scm>
 		<connection>scm:git:git@github.com:michael-simons/native-image-config-transformer.git</connection>
 		<developerConnection>scm:git:git@github.com:michael-simons/native-image-config-transformer.git</developerConnection>
-		<tag>0.0.1</tag>
+		<tag>HEAD</tag>
 		<url>https://github.com/michael-simons/native-image-config-transformer</url>
 	</scm>
 
